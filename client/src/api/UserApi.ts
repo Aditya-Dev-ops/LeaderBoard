@@ -29,7 +29,7 @@ const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/api/user`,
+  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}api/user`,
 
     prepareHeaders: async (headers , {getState} ) => {
       const accessToken = (getState() as RootState).auth.token;
