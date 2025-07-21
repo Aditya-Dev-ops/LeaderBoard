@@ -37,17 +37,17 @@ export const addUser = async (req, res) => {
     }
   };
 
-// Claim Points (add to getUserId from givenUserId)
+// ClaimHistory Points (add to claimedBy from awardedBy)
 export const claimPoints = async (req, res) => {
     try {
-      const { getUserId, givenUserId, points } = req.body;
+      const { claimedBy, awardedBy, claimedPoints:points } = req.body;
   
-      if (!getUserId || !givenUserId || !points) {
+      if (!claimedBy || !awardedBy || !points) {
         return res.status(400).json({ message: "Missing required fields" });
       }
   
-      const getUser = await User.findById(getUserId);
-      const givenUser = await User.findById(givenUserId);
+      const getUser = await User.findById(claimedBy);
+      const givenUser = await User.findById(awardedBy);
   
       if (!getUser || !givenUser) {
         return res.status(404).json({ message: "User(s) not found" });
@@ -57,8 +57,8 @@ export const claimPoints = async (req, res) => {
       await getUser.save();
   
       const history = new ClaimHistory({
-        getUserId,
-        givenUserId,
+        claimedBy,
+        awardedBy,
         claimedPoints: points,
       });
 
@@ -66,8 +66,8 @@ export const claimPoints = async (req, res) => {
   
       res.status(200).json({
         message: "Points claimed successfully",
-        receiver: { username: getUser.username, totalPoints: getUser.totalPoints },
-        giver: { username: givenUser.username },
+        claimedBy: { username: getUser.username, totalPoints: getUser.totalPoints },
+        awardedBy: { username: givenUser.username },
         claimedPoints: points,
       });
     } catch (err) {
@@ -104,5 +104,20 @@ export const getLeaderboard = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch leaderboard", error: err.message });
+  }
+};
+
+export const getClaimHistoryByUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const claims = await ClaimHistory.find({ claimedBy: userId })
+      .populate("awardedBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(claims);
+  } catch (error) {
+    console.error("Error fetching claim history:", error.message);
+    res.status(500).json({ error: "Failed to fetch claim history" });
   }
 };
