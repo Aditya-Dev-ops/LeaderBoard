@@ -7,6 +7,7 @@ const ClaimButton = ({ selectedUserId}:{selectedUserId:string}) => {
   const [claimPoints,{isLoading  }] = useClaimPointsMutation();
   const user= useSelector((state: RootState) => state.auth.user);
   console.log(user);
+  if(!user) return ;
   const handleClaim = async () => {
     if (!selectedUserId) return alert("Please select a user first!");
     const randomPoints = Math.floor(Math.random() * 11);

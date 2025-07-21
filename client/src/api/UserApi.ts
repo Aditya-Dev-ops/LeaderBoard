@@ -5,7 +5,7 @@ export interface User{
     _id:string
     username:string;
     email:string;
-    password:string;
+    password?:string;
     totalPoints?:number;
 }
 
@@ -24,10 +24,12 @@ interface ClaimHistoryType {
     createdAt: string;
     updatedAt: string;
 }
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000/api/user',
+  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/api/user`,
 
     prepareHeaders: async (headers , {getState} ) => {
       const accessToken = (getState() as RootState).auth.token;

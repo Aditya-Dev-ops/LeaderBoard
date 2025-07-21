@@ -16,7 +16,7 @@ export default function LoginPage() {
 
   const [loginUser, { isLoading }] = useLoginMutation();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await loginUser({ email, password }).unwrap();
@@ -90,7 +90,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full rounded-full min-h-[30px] flex justify-center items-center bg-gradient-to-r from-blue-400 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
         >
-          {isLoading ? <Loader size="10" /> : "LOGIN"}
+          {isLoading ? <Loader/> : "LOGIN"}
         </button>
 
         <div className="mt-8 text-center text-gray-500 text-sm">

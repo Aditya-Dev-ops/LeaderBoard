@@ -18,9 +18,12 @@ export interface RegisterRequest extends AuthRequest {
   username: string;
 }
 
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000/api/auth' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/api/auth` }),
   tagTypes: ['Auth'],
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, AuthRequest>({
