@@ -14,7 +14,12 @@ dotenv.config();
 
 connectDB();
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: '*', // allow from everywhere
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(helmet());
 
